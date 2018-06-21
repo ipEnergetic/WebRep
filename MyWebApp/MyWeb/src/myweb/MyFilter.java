@@ -12,26 +12,34 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import javax.servlet.http.HttpServletResponse;
+
+import javax.xml.ws.WebFault;
+
+
 public class MyFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
         System.out.println("MyFilter init!");
     }
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)servletRequest;
-        String servletPath = req.getServletPath();
-        
-        
-//        System.out.println("#INFO " + new Date() + " - ServletPath :" + servletPath //
-//                + ", URL =" + req.getRequestURL());
-        
-        // Разрешить request продвигаться дальше. (Перейти данный Filter).
+
+        System.out.println("inside Filter"); // Тестовая инфа, что зашел в Фильтр
+
+        String idParam = servletRequest.getParameter("id");
+
+        HttpServletResponse resp = (HttpServletResponse)servletResponse;
+        if ("softclub".equals(idParam)) {
+            resp.sendRedirect("http://softclub.by");
+            return;
+        }
+
         filterChain.doFilter(servletRequest, servletResponse);
-        
+
     }
 
     @Override
